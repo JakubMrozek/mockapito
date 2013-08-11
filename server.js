@@ -7,6 +7,7 @@
 var express = require('express');
 var http = require('http');
 var io = require('socket.io');
+var File = require('./lib/File');
 
 
 /**
@@ -46,62 +47,21 @@ app.get('/', function(req, res, next){
  * 
  */
 io.sockets.on('connection', function(socket){
-  socket.emit('load', load());
-  socket.on('save', save);
+  socket.emit('load', file.get());
+  socket.on('save', file.save);
 });
 
 
+/**
+ * Process all requests.
+ * 
+ */
 
-
-var fs = require('fs');
-var parser  = require('apiary-blueprint-parser');
-
-function Api() {
-	this.content = null;
-}
-
-Api.prototype.load = function() {
-  var content = fs.readFileSync('./mockapito.apib');
-  this.content = parser.parse(content.toString());
-};
-
-Api.prototype.parse = function(method, url) {
-	var sections = this.content.sections;
-	for (var i = 0; i < sections.length; ++i) {
-		var resources = sections[i].resources;
-		for (var ii = 0; ii < resources.length; ++ii) {
-			if (resources[ii].method === method && resources[ii].url === url) {
-				return {
-        	status: resources[ii].responses[0].status,
-        	body: resources[ii].responses[0].body
-        }
-			}
-		}
-	}
-};
-
-
-var api = new Api();
-api.load();
-
+var file = new File();
 app.all('*', function(req, res, next) {
-  var content = api.parse(req.method, req.url);
-  res.type('json');
-  res.send(content.status, content.body);
+  var result = file.find(req.method, req.url);
+  for (var header in result.headers) {
+  	res.set(header, result.headers[header]);
+  }
+  res.send(result.status, result.body);
 });
-
-
-
-fs.watchFile('./mockapito.apib', function(cur, prev){
-  api.load();
-});
-
-var load = function() {
-  var content = fs.readFileSync('./mockapito.apib');
-  return content.toString();
-};
-
-var save = function(content) {
-  fs.writeFileSync('./mockapito.apib', content);
-};
-
