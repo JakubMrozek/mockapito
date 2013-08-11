@@ -11,7 +11,8 @@
     "mocha": "~1.12.0",
     "ejs": "~0.8.4",
     "socket.io": "~0.9.16",
-    "bower": "~1.1.2"
+    "bower": "~1.1.2",
+    "apiary-blueprint-parser": "~0.4.4"
   },
   "devDependencies": {
     "mocha": "",

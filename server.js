@@ -41,8 +41,6 @@ app.get('/', function(req, res, next){
 });
 
 
-
-
 /**
  * Websocket rules.
  * 
@@ -53,7 +51,50 @@ io.sockets.on('connection', function(socket){
 });
 
 
+
+
 var fs = require('fs');
+var parser  = require('apiary-blueprint-parser');
+
+function Api() {
+	this.content = null;
+}
+
+Api.prototype.load = function() {
+  var content = fs.readFileSync('./mockapito.apib');
+  this.content = parser.parse(content.toString());
+};
+
+Api.prototype.parse = function(method, url) {
+	var sections = this.content.sections;
+	for (var i = 0; i < sections.length; ++i) {
+		var resources = sections[i].resources;
+		for (var ii = 0; ii < resources.length; ++ii) {
+			if (resources[ii].method === method && resources[ii].url === url) {
+				return {
+        	status: resources[ii].responses[0].status,
+        	body: resources[ii].responses[0].body
+        }
+			}
+		}
+	}
+};
+
+
+var api = new Api();
+api.load();
+
+app.all('*', function(req, res, next) {
+  var content = api.parse(req.method, req.url);
+  res.type('json');
+  res.send(content.status, content.body);
+});
+
+
+
+fs.watchFile('./mockapito.apib', function(cur, prev){
+  api.load();
+});
 
 var load = function() {
   var content = fs.readFileSync('./mockapito.apib');
@@ -63,3 +104,4 @@ var load = function() {
 var save = function(content) {
   fs.writeFileSync('./mockapito.apib', content);
 };
+
