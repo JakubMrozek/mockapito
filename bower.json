@@ -1,0 +1,7 @@
+{
+  "name": "mockapito",
+  "version": "0.0.0",
+  "dependencies": {
+    "socket.io-client": "~0.9.16"
+  }
+}

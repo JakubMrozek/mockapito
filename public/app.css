@@ -1,0 +1,8 @@
+html, body {
+  height: 100%;
+}
+
+#content {
+  width: 80%;
+  height: 80%;
+}
