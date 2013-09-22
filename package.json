@@ -3,9 +3,10 @@
   "version": "0.0.1",
   "main": "server.js",
   "dependencies": {
+    "coffee-script": "~1.6.3",
+    "commander": "~2.0.0"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/JakubMrozek/mockapito.git"
