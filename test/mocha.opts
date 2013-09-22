@@ -1,5 +1,5 @@
---require ./test/mocha.js
+--require ./test/mocha.coffee
 --require should
 --reporter dot
 --ui bdd
---recursive 
+--recursive
