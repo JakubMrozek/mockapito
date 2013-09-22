@@ -7,6 +7,7 @@ Command.Init = require('../lib/CLI/Command/Init')
 
 module.exports = (config) ->
   config.file ?= process.cwd() + path.sep + 'apiary.apib'
+  config.error = console.error
 
   init = new Command.Init(config)
   program
