@@ -1,6 +1,6 @@
 {
   "name": "mockapito",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "main": "server.js",
   "scripts": {
     "test": "mocha test"
@@ -23,6 +23,7 @@
     "node": "0.10.x",
     "npm": "1.2.x"
   },
+  "preferGlobal": true,
   "bin": {
     "mockapito": "./bin/mockapito"
   }
