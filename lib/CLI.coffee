@@ -12,9 +12,10 @@ module.exports = (config) ->
   init = new Command.Init(config)
   program
     .command('init')
-    .option('-f --force', 'rewrite file apairy.apib')
-    .option('-n --name [name]', 'project name')
-    .option('-h --host [host]', "project host")
+    .description('creates a new apiary.apib file')
+    .option('-f --force', 'overwrite the apairy.apib file')
+    .option('-n --name [name]', 'sets the project name')
+    .option('-h --host [host]', "sets the project host")
     .action(init.process.bind(init))
 
   program.usage('[options]')
